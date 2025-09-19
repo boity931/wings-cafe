@@ -14,7 +14,6 @@ function App() {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [refreshSignal, setRefreshSignal] = useState(0);
 
-  // ✅ Fetch products from API
   const fetchProducts = async () => {
     try {
       const res = await api.get('/products');
@@ -24,7 +23,6 @@ function App() {
     }
   };
 
-  // ✅ Fetch transactions from API
   const fetchTransactions = async () => {
     try {
       const res = await api.get('/transactions');
@@ -34,19 +32,12 @@ function App() {
     }
   };
 
-  // ✅ Initial fetch
-  useEffect(() => {
-    fetchProducts();
-    fetchTransactions();
-  }, []);
-
-  // ✅ Re-fetch on refresh signal
+  // Combine both fetches into one useEffect
   useEffect(() => {
     fetchProducts();
     fetchTransactions();
   }, [refreshSignal]);
 
-  // ✅ Update local stock after sale
   const updateProductQuantity = (productId, newQuantity) => {
     setProducts(prev =>
       prev.map(p =>
@@ -55,7 +46,6 @@ function App() {
     );
   };
 
-  // ✅ Trigger refresh for components
   const handleRefresh = () => {
     setRefreshSignal(prev => prev + 1);
   };
@@ -73,22 +63,13 @@ function App() {
       <div className="main-content">
         <div className="content">
           {activeSection === 'dashboard' && (
-            <Dashboard
-              products={products}
-              refreshSignal={refreshSignal}
-            />
+            <Dashboard products={products} refreshSignal={refreshSignal} />
           )}
           {activeSection === 'inventory' && (
-            <Inventory
-              products={products}
-              onChanged={handleRefresh}
-            />
+            <Inventory products={products} onChanged={handleRefresh} />
           )}
           {activeSection === 'reports' && (
-            <Reports
-              transactions={transactions} // ✅ Pass transactions
-              refreshSignal={refreshSignal} // ✅ Trigger re-fetch
-            />
+            <Reports transactions={transactions} refreshSignal={refreshSignal} />
           )}
           {activeSection === 'sales' && (
             <Sales
@@ -105,6 +86,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

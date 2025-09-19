@@ -10,24 +10,24 @@ const DB_PATH = path.join(__dirname, 'db.json');
 app.use(express.json());
 app.use(cors());
 
-// Read DB
+
 function readDB() {
   const raw = fs.readFileSync(DB_PATH, 'utf8');
   return JSON.parse(raw);
 }
 
-// Write DB
+
 function writeDB(data) {
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
 }
 
-// GET all products
+
 app.get('/products', (req, res) => {
   const db = readDB();
   res.json(db.products || []);
 });
 
-// POST new product
+
 app.post('/products', (req, res) => {
   const db = readDB();
   const product = { id: uuidv4(), ...req.body };
@@ -37,7 +37,7 @@ app.post('/products', (req, res) => {
   res.status(201).json(product);
 });
 
-// PUT update product
+
 app.put('/products/:id', (req, res) => {
   const db = readDB();
   const { id } = req.params;
@@ -48,7 +48,7 @@ app.put('/products/:id', (req, res) => {
   res.json(db.products[idx]);
 });
 
-// DELETE product
+
 app.delete('/products/:id', (req, res) => {
   const db = readDB();
   const { id } = req.params;
@@ -57,7 +57,7 @@ app.delete('/products/:id', (req, res) => {
   res.json({ message: 'Deleted' });
 });
 
-// POST stock transaction
+
 app.post('/products/:id/transaction', (req, res) => {
   const db = readDB();
   const { id } = req.params;
@@ -94,13 +94,13 @@ app.post('/products/:id/transaction', (req, res) => {
   res.json({ product, transaction });
 });
 
-// GET all transactions
+
 app.get('/transactions', (req, res) => {
   const db = readDB();
   res.json(db.transactions || []);
 });
 
-// GET low-stock report
+
 app.get('/reports/low-stock', (req, res) => {
   const threshold = Number(req.query.threshold || 5);
   const db = readDB();
@@ -108,7 +108,7 @@ app.get('/reports/low-stock', (req, res) => {
   res.json(low);
 });
 
-// Start server
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

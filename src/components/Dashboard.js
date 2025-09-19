@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-// eslint-disable-next-line no-unused-vars
-import api from '../api'; // Kept with suppression
+
 
 export default function Dashboard({ products: initialProducts = [], onStockChange }) {
   const [products, setProducts] = useState(initialProducts);
-  const [editQuantity, setEditQuantity] = useState({}); // { productId: editingValue }
+  const [editQuantity, setEditQuantity] = useState({});
 
   useEffect(() => {
     setProducts(initialProducts);
@@ -45,7 +44,7 @@ export default function Dashboard({ products: initialProducts = [], onStockChang
         Dashboard Overview
       </h3>
 
-      {/* Summary Cards */}
+
       <div className="summary-cards" style={{
         display: 'flex',
         gap: '20px',
@@ -66,22 +65,27 @@ export default function Dashboard({ products: initialProducts = [], onStockChang
         </div>
       </div>
 
-      {/* Product Cards */}
+
       <div className="product-cards" style={{
         display: 'flex',
         flexWrap: 'wrap',
         gap: '15px',
         marginTop: '20px',
       }}>
-        {products.slice(0, 8).map(p => {  /* <-- changed from 5 to 8 */
+        {products.slice(0, 8).map(p => {
           const isLowQuantity = Number(p.quantity || 0) <= 5;
           const currentQuantity = editQuantity[p.id] !== undefined ? editQuantity[p.id] : p.quantity;
 
           return (
-            <div key={p.id} className="product-card" style={{
-              ...productCardStyle,
-              border: isLowQuantity ? '2px solid #e74c3c' : '1px solid #ecf0f1',
-            }}>
+            <div
+              key={p.id}
+              className="product-card"
+              title={isLowQuantity ? '⚠️ Low stock! Consider restocking.' : undefined} // ✅ ADDED
+              style={{
+                ...productCardStyle,
+                border: isLowQuantity ? '2px solid #e74c3c' : '1px solid #ecf0f1',
+              }}
+            >
               <img
                 src={p.image || 'https://via.placeholder.com/150?text=No+Image'}
                 alt={p.name}
@@ -113,14 +117,14 @@ export default function Dashboard({ products: initialProducts = [], onStockChang
         })}
       </div>
 
-      {/* Working Hours and Social Media Cards moved under products */}
+
       <div className="info-cards" style={{
         display: 'flex',
         gap: '20px',
         marginTop: '30px',
         flexWrap: 'wrap',
       }}>
-        {/* Working Hours Card */}
+
         <div style={cardStyle}>
           <h4 style={cardTitleStyle}>🕒 Working Hours</h4>
           <p><strong>Days:</strong> Monday to Saturday</p>
@@ -128,7 +132,7 @@ export default function Dashboard({ products: initialProducts = [], onStockChang
           <p><strong>Weekends:</strong> 8:00 AM - 7:00 PM</p>
         </div>
 
-        {/* Social Media & Contact Card with Location */}
+
         <div style={cardStyle}>
           <h4 style={cardTitleStyle}>📱 Contact & Socials</h4>
           <p><strong>Facebook:</strong> @wingshop</p>
@@ -142,7 +146,7 @@ export default function Dashboard({ products: initialProducts = [], onStockChang
   );
 }
 
-// 🔧 Inline styles
+
 const cardStyle = {
   flex: 1,
   padding: '15px',
@@ -208,8 +212,8 @@ const quantityInputStyle = {
   border: '1px solid #ddd',
   backgroundColor: 'transparent',
   color: '#000',
+  
 };
-
 
 
 

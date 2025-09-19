@@ -1,14 +1,18 @@
+
 import axios from 'axios';
 
+
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || 'http://localhost:3001';
+
 const api = axios.create({
-  baseURL: 'http://localhost:3001', // Ensure this matches your backend server URL
-  timeout: 15000, // 15-second timeout for slower connections
+  baseURL: SERVER_URL,
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Response interceptor for detailed error handling
+
 api.interceptors.response.use(
   response => response,
   async error => {
@@ -21,17 +25,21 @@ api.interceptors.response.use(
       responseData: error.response?.data,
       timestamp: new Date().toISOString(),
     });
+
+  
     if (error.code === 'ECONNABORTED') {
-      return Promise.reject(new Error('Request timed out. Please verify the server is running at http://localhost:3001.'));
+      return Promise.reject(new Error(`Request timed out. Please verify the server is running at ${SERVER_URL}.`));
     }
+
     if (!error.response) {
-      // Attempt to ping the server to confirm availability
+      
       try {
-        await axios.get('http://localhost:3001/ping', { timeout: 5000 });
+        await axios.get(`${SERVER_URL}/ping`, { timeout: 5000 });
       } catch (pingError) {
-        return Promise.reject(new Error('Network error. Server at http://localhost:3001 is unreachable. Please check your connection or server status.'));
+        return Promise.reject(new Error(`Network error. Server at ${SERVER_URL} is unreachable. Please check your connection or server status.`));
       }
     }
+
     return Promise.reject(error);
   }
 );

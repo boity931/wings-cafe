@@ -11,7 +11,7 @@ function Inventory({ onChanged }) {
     price: '',
     quantity: '',
   });
-  const [editedFields, setEditedFields] = useState({}); // renamed from editedQuantity
+  const [editedFields, setEditedFields] = useState({}); 
 
   const fetchProducts = async () => {
     try {
@@ -61,7 +61,7 @@ function Inventory({ onChanged }) {
   };
 
   const handleFieldChange = (id, value, field) => {
-    // Allow digits and decimal point only
+  
     if (value === '' || /^\d*\.?\d*$/.test(value)) {
       setEditedFields(prev => ({
         ...prev,
@@ -74,7 +74,7 @@ function Inventory({ onChanged }) {
     const edits = editedFields[product.id];
     if (!edits) return;
 
-    // Validate only edited fields
+    
     if (edits.price !== undefined) {
       const priceVal = parseFloat(edits.price);
       if (isNaN(priceVal) || priceVal < 0) {
@@ -88,7 +88,7 @@ function Inventory({ onChanged }) {
       }
     }
 
-    // Prepare updated product with only changed fields
+  
     const updatedProduct = { ...product };
     if (edits.price !== undefined) updatedProduct.price = parseFloat(edits.price);
     if (edits.quantity !== undefined) updatedProduct.quantity = parseInt(edits.quantity, 10);

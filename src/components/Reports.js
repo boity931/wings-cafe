@@ -4,9 +4,6 @@ import api from '../api';
 function Reports({ refreshSignal, products = [], transactions = [] }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // No need to fetch products here if parent passes them,
-  // but we’ll still fetch in case parent wants the latest from API
   const [localProducts, setLocalProducts] = useState([]);
 
   useEffect(() => {
@@ -16,7 +13,7 @@ function Reports({ refreshSignal, products = [], transactions = [] }) {
       try {
         const prodRes = await api.get('/products', { timeout: 5000 });
         if (!Array.isArray(prodRes.data)) {
-          throw new Error('Products data is not an array');
+          throw new Error('Products data is not an array');222
         }
         setLocalProducts(prodRes.data || []);
       } catch (err) {
@@ -29,7 +26,6 @@ function Reports({ refreshSignal, products = [], transactions = [] }) {
     fetchData();
   }, [refreshSignal]);
 
-  // Use the products passed as prop if available, otherwise fallback to localProducts
   const allProducts = (products && products.length > 0) ? products : localProducts;
 
   const totalSales = (transactions || []).reduce((acc, txn) => {
@@ -54,9 +50,12 @@ function Reports({ refreshSignal, products = [], transactions = [] }) {
       price: Number(product.price || 0).toFixed(2),
       soldQuantity,
       availableQuantity,
+      totalValue: Number(product.price || 0) * availableQuantity, 
       needsRestock: availableQuantity <= 5,
     };
   });
+
+  const totalAvailableStockValue = productsWithDetails.reduce((acc, item) => acc + item.totalValue, 0).toFixed(2); 
 
   if (loading) return <div className="dashboard">Loading reports...</div>;
   if (error) return <div className="dashboard">Error: {error}</div>;
@@ -71,6 +70,10 @@ function Reports({ refreshSignal, products = [], transactions = [] }) {
         <div className="summary-card total-products" style={{ flex: 1, padding: '1rem', border: '1px solid #ccc' }}>
           <h4>Total Products</h4>
           <p>{totalProducts}</p>
+        </div>
+        <div className="summary-card available-value" style={{ flex: 1, padding: '1rem', border: '1px solid #ccc' }}>
+          <h4>Total Stock Value</h4>
+          <p>M{totalAvailableStockValue}</p>
         </div>
         <div
           className="summary-card restock"
@@ -122,6 +125,7 @@ function Reports({ refreshSignal, products = [], transactions = [] }) {
 }
 
 export default Reports;
+
 
 
 
