@@ -12,14 +12,17 @@ app.use(cors());
 
 
 function readDB() {
+  if (!fs.existsSync(DB_PATH)) {
+    fs.writeFileSync(DB_PATH, JSON.stringify({ products: [], transactions: [] }, null, 2));
+  }
   const raw = fs.readFileSync(DB_PATH, 'utf8');
   return JSON.parse(raw);
 }
 
-
 function writeDB(data) {
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
 }
+
 
 
 app.get('/products', (req, res) => {
@@ -30,8 +33,7 @@ app.get('/products', (req, res) => {
 
 app.post('/products', (req, res) => {
   const db = readDB();
-  const product = { id: uuidv4(), ...req.body };
-  if (!db.products) db.products = [];
+  const product = { id: uuidv4(), quantity: 0, ...req.body };
   db.products.push(product);
   writeDB(db);
   res.status(201).json(product);
@@ -43,6 +45,7 @@ app.put('/products/:id', (req, res) => {
   const { id } = req.params;
   const idx = (db.products || []).findIndex(p => p.id === id);
   if (idx === -1) return res.status(404).json({ message: 'Not found' });
+
   db.products[idx] = { ...db.products[idx], ...req.body };
   writeDB(db);
   res.json(db.products[idx]);
@@ -113,4 +116,3 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-

@@ -5,6 +5,7 @@
   "homepage": "https://boity931.github.io/wings-cafe",
   "dependencies": {
     "axios": "^1.11.0",
+    "cors": "^2.8.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.8.2",
@@ -41,5 +42,3 @@
     "gh-pages": "^5.0.0"
   }
 }
-
-

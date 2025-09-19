@@ -13,7 +13,7 @@ function Reports({ refreshSignal, products = [], transactions = [] }) {
       try {
         const prodRes = await api.get('/products', { timeout: 5000 });
         if (!Array.isArray(prodRes.data)) {
-          throw new Error('Products data is not an array');222
+          throw new Error('Products data is not an array');
         }
         setLocalProducts(prodRes.data || []);
       } catch (err) {
@@ -125,6 +125,7 @@ function Reports({ refreshSignal, products = [], transactions = [] }) {
 }
 
 export default Reports;
+
 
 
 
