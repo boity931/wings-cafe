@@ -8,11 +8,20 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+<<<<<<< HEAD
     "debug": "^4.4.3",
+=======
+>>>>>>> 1dbbea86 (Initial commit with backend router.js and index.js)
     "express": "^4.18.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "nodemon": "^3.1.10"
   }
 }
+=======
+    "nodemon": "^2.0.22"
+  }
+}
+>>>>>>> 1dbbea86 (Initial commit with backend router.js and index.js)
