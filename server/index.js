@@ -6,28 +6,29 @@ const router = require('./router');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
+// Enable JSON parsing and CORS
 app.use(express.json());
-app.use(cors({ origin: '*' }));  // Allow all for now; tighten later
+app.use(cors({ origin: '*' }));
 
 // API routes
 app.use('/api', router);
 
-// Serve static React build from server/build
-app.use(express.static(path.join(__dirname, 'build')));
+// Serve React build from server/build
+const buildPath = path.join(__dirname, 'build');
+app.use(express.static(buildPath));
 
-// Catch-all for React (after API/static)
+// Catch-all for React Router (must come after API routes)
 app.get('*', (req, res) => {
-  const filePath = path.join(__dirname, 'build', 'index.html');
-  console.log(`Serving: ${req.url}`);
-  res.sendFile(filePath, (err) => {
+  res.sendFile(path.join(buildPath, 'index.html'), (err) => {
     if (err) {
-      console.error('Serve error:', err);
-      res.status(404).send('Not found');
+      console.error('Error serving React app:', err);
+      res.status(500).send('React app not found');
     }
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`Server on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
+
 
