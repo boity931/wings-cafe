@@ -12,12 +12,12 @@ app.use(cors({ origin: '*' }));  // Allow all for now; tighten later
 // API routes
 app.use('/api', router);
 
-// Serve static React build
-app.use(express.static(path.join(__dirname, '../build')));
+// Serve static React build from server/build
+app.use(express.static(path.join(__dirname, 'build')));
 
 // Catch-all for React (after API/static)
 app.get('*', (req, res) => {
-  const filePath = path.join(__dirname, '../build', 'index.html');
+  const filePath = path.join(__dirname, 'build', 'index.html');
   console.log(`Serving: ${req.url}`);
   res.sendFile(filePath, (err) => {
     if (err) {
